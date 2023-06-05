@@ -1,0 +1,235 @@
+openapi: 3.0.0
+info:
+  title: Somer API
+  contact: {}
+  version: '1.0'
+servers:
+  - url: http://api.somer.padlas.duckdns.org/api/v1
+    variables: {}
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Autentication
+      summary: Register user
+      operationId: Registeruser
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/RegisteruserRequest'
+                - example:
+                    name: anna
+                    email: anna@somer.hu
+                    password: '123456'
+            example:
+              name: anna
+              email: anna@somer.hu
+              password: '123456'
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /auth/login:
+    post:
+      tags:
+        - Autentication
+      summary: Login user
+      operationId: Loginuser
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/LoginuserRequest'
+                - example:
+                    email: anna@somer.hu
+                    password: '123456'
+            example:
+              email: anna@somer.hu
+              password: '123456'
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /jobs:
+    post:
+      tags:
+        - Jobs
+      summary: Create Job
+      operationId: CreateJob
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/CreateJobRequest'
+                - example:
+                    company: Facebook
+                    position: szellőztető
+            example:
+              company: Facebook
+              position: szellőztető
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+        - Jobs
+      summary: Get all jobs
+      operationId: Getalljobs
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /jobs/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: the job id
+    get:
+      tags:
+        - Jobs
+      summary: Get Job
+      operationId: GetJob
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    patch:
+      tags:
+        - Jobs
+      summary: Update job
+      operationId: Updatejob
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/UpdatejobRequest'
+                - example:
+                    company: Google
+                    position: portás
+                    createdBy: 647db14eb167b648643d1fb2
+            example:
+              company: Google
+              position: portás
+              createdBy: 647db14eb167b648643d1fb2
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+
+    delete:
+      tags:
+        - Jobs
+      summary: Delete Job
+      operationId: DeleteJob
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+components:
+  schemas:
+    RegisteruserRequest:
+      title: RegisteruserRequest
+      required:
+        - name
+        - email
+        - password
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+      example:
+        name: anna
+        email: anna@somer.hu
+        password: '123456'
+    LoginuserRequest:
+      title: LoginuserRequest
+      required:
+        - email
+        - password
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      example:
+        email: anna@somer.hu
+        password: '123456'
+    CreateJobRequest:
+      title: CreateJobRequest
+      required:
+        - company
+        - position
+      type: object
+      properties:
+        company:
+          type: string
+        position:
+          type: string
+      example:
+        company: Facebook
+        position: szellőztető
+    UpdatejobRequest:
+      title: UpdatejobRequest
+      required:
+        - company
+        - position
+        - createdBy
+      type: object
+      properties:
+        company:
+          type: string
+        position:
+          type: string
+        createdBy:
+          type: string
+      example:
+        company: Google
+        position: portás
+        createdBy: 647db14eb167b648643d1fb2
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+security:
+  - bearer: []
+tags:
+  - name: Autentication
+  - name: Jobs
