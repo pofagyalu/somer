@@ -7,7 +7,15 @@ const register = async (req, res) => {
   const user = await User.create({ ...req.body });
   const token = user.createJWT();
 
-  res.status(StatusCodes.CREATED).json({ user: { name: user.name }, token });
+  res.status(StatusCodes.CREATED).json({
+    user: {
+      email: user.email,
+      lastName: user.lastName,
+      location: user.location,
+      name: user.name,
+      token,
+    },
+  });
 };
 
 const login = async (req, res) => {
@@ -30,10 +38,48 @@ const login = async (req, res) => {
   }
 
   const token = user.createJWT();
-  res.status(StatusCodes.OK).json({ user: { name: user.name }, token });
+  res.status(StatusCodes.OK).json({
+    user: {
+      email: user.email,
+      lastName: user.lastName,
+      location: user.location,
+      name: user.name,
+      token,
+    },
+  });
+};
+
+const updateUser = async (req, res) => {
+  const { email, name, lastName, location } = req.body;
+
+  if (!email || !name || !location || !lastName) {
+    throw new BadRequestError('Please provide all values');
+  }
+
+  const user = await User.findById(req.user.userId);
+
+  user.email = email;
+  user.name = name;
+  user.lastName = lastName;
+  user.location = location;
+
+  await user.save();
+
+  const token = user.createJWT();
+
+  res.status(StatusCodes.OK).json({
+    user: {
+      email: user.email,
+      lastName: user.lastName,
+      location: user.location,
+      name: user.name,
+      token,
+    },
+  });
 };
 
 module.exports = {
   register,
   login,
+  updateUser,
 };
