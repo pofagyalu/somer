@@ -9,6 +9,18 @@ const userSchema = new mongoose.Schema({
     minlength: 3,
     maxlength: 50,
   },
+  lastName: {
+    type: String,
+    trim: true,
+    maxlength: 20,
+    default: 'családnév',
+  },
+  location: {
+    type: String,
+    trim: true,
+    maxlength: 20,
+    default: 'városom',
+  },
   email: {
     type: String,
     required: [true, 'Please provide email'],
@@ -26,12 +38,13 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.pre('save', async function () {
+  if (!this.isModified('password')) return;
   this.password = await bcrypt.hash(this.password, 12);
 });
 
 userSchema.methods.createJWT = function () {
   return (token = jwt.sign(
-    { userId: this._id, name: this.name },
+    { userId: this._id, email: this.email },
     process.env.JWT_SECRET,
     {
       expiresIn: process.env.JWT_LIFETIME,
